@@ -6,15 +6,7 @@
 <title>DECORA | دکورا</title>
 <meta name="theme-color" content="#0878df">
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" type="image/png" href="icon-192.png">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="دکورا">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;800&display=swap" media="print" onload="this.media='all'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;800&display=swap"></noscript>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;800&display=swap">
 <style>
 /* Layout: collapsible sections beside a sticky quote card with a tape-measure edge, inside a thin sky-blue page frame. */
 :root {
@@ -418,11 +410,6 @@ html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
         <div class="row" id="g-kitchen"></div>
       </details>
 
-      <details class="panel" id="sec-wardrobe">
-        <summary><span class="st">کمد</span><span class="badge" id="b-wardrobe"></span></summary>
-        <div class="row" id="g-wardrobe"></div>
-      </details>
-
       <details class="panel" id="sec-deco">
         <summary><span class="st">نما، حجم و کارهای تزئینی</span><span class="badge" id="b-deco"></span></summary>
         <div class="row" id="g-deco"></div>
@@ -534,12 +521,12 @@ html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
       handle: { knob: 0, bar: 0, profile: 0 }
     },
     ct: { none: 0, hpl: 0, stone: 0, corian: 0 },
-    floorRatio: 100, wallRatio: 100, fridgeRatio: 100, islandFactor: 100, wardrobeRatio: 100, bedroomRatio: 100,
+    floorRatio: 100, wallRatio: 100, fridgeRatio: 100, islandFactor: 100, wardrobeRatio: 100, supRatio: 100,
     tall: 0, drawer: 0,
     volume: 0, tv: 0, box: 0, farsi: 0, profile: 0, led: 0
   };
   var DEFAULT_IN = {
-    floor: 0, wall: 0, fridge: 0, island: 0, wardrobe: 0, bedroom: 0,
+    floor: 0, wall: 0, fridge: 0, island: 0, wardrobe: 0, sup: 0,
     nama: 0, volume: 0, tv: 0, box: 0, farsi: 0,
     door: 'mem', ct: 'hpl', ctLen: 0,
     tall: 0, drawer: 0, profile: 0, led: 0, extra: 0,
@@ -565,8 +552,8 @@ html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
     ['kitchen', 'wall', 'کابینت هوایی', 'متر'],
     ['kitchen', 'fridge', 'بالای یخچالی', 'متر'],
     ['kitchen', 'island', 'جزیره', 'متر'],
-    ['wardrobe', 'wardrobe', 'کمدی (ورودی، راهرو، دیواری)', 'متر'],
-    ['wardrobe', 'bedroom', 'کمد اتاق خواب', 'متر'],
+    ['kitchen', 'wardrobe', 'کمدی', 'متر'],
+    ['kitchen', 'sup', 'سوپری', 'متر'],
     ['deco', 'nama', 'نمای اضافه', 'متر مربع'],
     ['deco', 'volume', 'حجم‌کاری', 'متر مربع'],
     ['deco', 'tv', 'تی‌وی وال', 'متر مربع'],
@@ -582,8 +569,7 @@ html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
     ['pay', 'profitPct', 'سود', '٪']
   ];
   var SECS = {
-    kitchen: ['floor', 'wall', 'fridge', 'island'],
-    wardrobe: ['wardrobe', 'bedroom'],
+    kitchen: ['floor', 'wall', 'fridge', 'island', 'wardrobe', 'sup'],
     deco: ['nama', 'volume', 'tv', 'box', 'farsi'],
     ct: ['ctLen'],
     extras: ['tall', 'drawer', 'profile', 'led', 'extra'],
@@ -659,7 +645,7 @@ html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
       ['ct.hpl', 'ام‌دی‌اف یا HPL', 'تومان'], ['ct.stone', 'سنگ', 'تومان'], ['ct.corian', 'کورین', 'تومان']]],
     ['درصد قیمت هر نوع کابینت نسبت به نرخ پایه', [
       ['floorRatio', 'کابینت زمینی', '٪'], ['wallRatio', 'کابینت هوایی', '٪'], ['fridgeRatio', 'بالای یخچالی', '٪'], ['islandFactor', 'جزیره', '٪'],
-      ['wardrobeRatio', 'کمدی', '٪'], ['bedroomRatio', 'کمد اتاق خواب', '٪']]],
+      ['wardrobeRatio', 'کمدی', '٪'], ['supRatio', 'سوپری', '٪']]],
     ['قیمت واحد کارهای دیگر', [
       ['volume', 'حجم‌کاری (هر متر مربع)', 'تومان'], ['tv', 'تی‌وی وال (هر متر مربع)', 'تومان'],
       ['box', 'باکس (هر متر)', 'تومان'], ['farsi', 'فارسی‌کاری (هر متر)', 'تومان'],
@@ -703,7 +689,7 @@ html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
   }
   fillInputs();
 
-  var RATIO_KEYS = { floorRatio: 1, wallRatio: 1, fridgeRatio: 1, islandFactor: 1, wardrobeRatio: 1, bedroomRatio: 1 };
+  var RATIO_KEYS = { floorRatio: 1, wallRatio: 1, fridgeRatio: 1, islandFactor: 1, wardrobeRatio: 1, supRatio: 1 };
   function priceCount() {
     var n = 0;
     (function walk(o) {
@@ -893,10 +879,8 @@ html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
     function set(id, t) { $('b-' + id).textContent = t; }
     var n = priceCount();
     set('rates', n > 0 ? fmt(n) + ' نرخ ثبت شده' : 'خالی');
-    var k = I.floor + I.wall + I.fridge + I.island;
+    var k = I.floor + I.wall + I.fridge + I.island + I.wardrobe + I.sup;
     set('kitchen', k > 0 ? fmtM(k) + ' متر' : '');
-    var w = I.wardrobe + I.bedroom;
-    set('wardrobe', w > 0 ? fmtM(w) + ' متر' : '');
     var d = cnt(SECS.deco);
     set('deco', d > 0 ? fmt(d) + ' مورد' : '');
     set('door', NAMES.doors[I.door]);
@@ -918,7 +902,7 @@ html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
     });
 
     var door = P.doors[I.door], namaP = P.nama[I.door], ct = P.ct[I.ct];
-    var cabLen = I.floor + I.wall + I.fridge + I.island + I.wardrobe + I.bedroom;
+    var cabLen = I.floor + I.wall + I.fridge + I.island + I.wardrobe + I.sup;
     var area = I.nama + I.volume + I.tv;
     var lines = [], missing = [];
     function add(label, qty, unit, rate, amount) {
@@ -935,7 +919,7 @@ html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
     lin('بالای یخچالی', I.fridge, P.fridgeRatio);
     lin('جزیره', I.island, P.islandFactor);
     lin('کمدی', I.wardrobe, P.wardrobeRatio);
-    lin('کمد اتاق خواب', I.bedroom, P.bedroomRatio);
+    lin('سوپری', I.sup, P.supRatio);
     add('نمای اضافه (' + NAMES.doors[I.door] + ')', I.nama, 'متر مربع', namaP, I.nama * namaP);
     add('حجم‌کاری', I.volume, 'متر مربع', P.volume, I.volume * P.volume);
     add('تی‌وی وال', I.tv, 'متر مربع', P.tv, I.tv * P.tv);
@@ -1704,6 +1688,5 @@ window.Breshyar={mount(host){host.replaceChildren(root);if(!started){started=tru
 })();
 </script>
 
-<script>if('serviceWorker' in navigator&&location.protocol.startsWith('http')){addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))}</script>
 </body>
 </html>
